@@ -23,7 +23,7 @@ class FilmFragment : Fragment() {
     private lateinit var filmRecyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val filmLiveData: LiveData<String> = FilmFetchr().fetchContents()
+        val filmLiveData: LiveData<String> = FilmFetchr().fetchFilms()
         filmLiveData.observe(this, Observer { responseString ->
             Log.d(TAG, "Response received: $responseString")
         })

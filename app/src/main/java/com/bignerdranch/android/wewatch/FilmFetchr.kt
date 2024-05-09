@@ -17,14 +17,14 @@ class FilmFetchr{
     private val filmApi: FilmApi
     init{
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://www.omdbapi.com/")
+            .baseUrl("https://api.omdbapi.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
         filmApi = retrofit.create(FilmApi::class.java)
     }
-    fun fetchContents(): LiveData<String>{
+    fun fetchFilms(): LiveData<String>{
         val responseLiveData: MutableLiveData<String> = MutableLiveData()
-        val filmRequest: Call<String> = filmApi.fetchContents()
+        val filmRequest: Call<String> = filmApi.fetchFilms()
         filmRequest.enqueue(object : Callback<String>{
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e(TAG, "Failed to fetch photos", t)
