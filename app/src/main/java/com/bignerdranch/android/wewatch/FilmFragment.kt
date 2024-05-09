@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.wewatch.api.FilmApi
@@ -21,20 +23,9 @@ class FilmFragment : Fragment() {
     private lateinit var filmRecyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://www.omdbapi.com/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        val filmApi: FilmApi = retrofit.create(FilmApi::class.java)
-        val filmHomePageRequest: Call<String> = filmApi.fetchContents()
-        filmHomePageRequest.enqueue(object : Callback<String>{
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e(TAG, "Failed to film", t)
-            }
-
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.d(TAG, "Response received:${response.body()}")
-            }
+        val filmLiveData: LiveData<String> = FilmFetchr().fetchContents()
+        filmLiveData.observe(this, Observer { responseString ->
+            Log.d(TAG, "Response received: $responseString")
         })
     }
     override fun onCreateView(
