@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -44,10 +45,27 @@ class FilmFragment : Fragment() {
         filmViewModel.filmItemLiveData.observe(
             viewLifecycleOwner,
             Observer { filmItems ->
-                Log.d(TAG, "Have film items from ViewModel $filmItems")
-                //Обновить данные, поддерживающие представление утилизатора
+                filmRecyclerView.adapter = FilmAdapter(filmItems)
             }
         )
+    }
+
+    private class FilmHolder(itemTextView: TextView) : RecyclerView.ViewHolder(itemTextView){
+        val bindTitle: (CharSequence) -> Unit = itemTextView::setText
+    }
+
+    private class FilmAdapter(private val filmItems: List<FilmItem>) : RecyclerView.Adapter<FilmHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilmHolder {
+            val textView = TextView(parent.context)
+            return FilmHolder(textView)
+        }
+
+        override fun getItemCount(): Int = filmItems.size
+
+        override fun onBindViewHolder(holder: FilmHolder, position: Int) {
+            val filmItem = filmItems[position]
+            holder.bindTitle(filmItem.title)
+        }
     }
 
 
