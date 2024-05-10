@@ -23,9 +23,9 @@ class FilmFragment : Fragment() {
     private lateinit var filmRecyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val filmLiveData: LiveData<String> = FilmFetchr().fetchFilms()
-        filmLiveData.observe(this, Observer { responseString ->
-            Log.d(TAG, "Response received: $responseString")
+        val filmLiveData: LiveData<List<FilmItem>> = FilmFetchr().fetchFilms()
+        filmLiveData.observe(this, Observer { filmItems ->
+            Log.d(TAG, "Response received: $filmItems")
         })
     }
     override fun onCreateView(
